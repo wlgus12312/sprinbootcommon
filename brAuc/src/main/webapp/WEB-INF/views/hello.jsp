@@ -87,7 +87,135 @@
 	}
 	
 	
+
+	function createFrm(frmStr){
+		
+		var frmIds = $("#" + frmStr).children('input[type=text], textarea, select, input[type=checkbox]');		
+		
+		var data = new Object();
+		
+		var id = "";		
+		var tagName = "";
+		var tagType = "";
+				
+		for(var i=0; i<frmIds.length; i++){			
+			
+			tagName = $(frmIds[i]).prop('tagName');			
+			id = $(frmIds[i]).attr('id');
+			
+			if(tagName == 'INPUT'){				
+				tagType = $(frmIds[i]).attr('type');
+				
+				//인풋텍스트 일때
+				if(tagType == 'text'){									
+					data[id] = $(frmIds[i]).val();			
+				
+				//인풋체크박스 일때
+				}else if(tagType == 'checkbox'){							
+					data[id] =  $(frmIds[i]).is(":checked") ? '1' : '0';					
+				}
+				
+			}else if(tagName == 'TEXTAREA'){
+				data[id] = $(frmIds[i]).val();
+				
+			}else if(tagName == 'SELECT'){
+				data[id] = $(frmIds[i]).val();				
+			}				
+		}
+		
+		console.log(data);
+		
+		// String 형태로 변환
+	    var jsonData = JSON.stringify(data);      
+	            
+		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+						
+		$.ajax({
+			url:'/getDataMap',
+			type:'POST',
+			dataType:'json',
+			data:{
+				   data : encrypt.toString()
+			},
+			success:function(data) { 	
+								
+				var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+				var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+				
+			    var resultList = JSON.parse(plaintext);
+			    
+			    console.log(resultList);
+			    			    			    
+			    //tbody 추가
+			    $.each(resultList, function(i){		
+				    var str = '<tr id=row' + i + '>';				    
+			    	str += '<td>' + resultList[i].usrnm + '</td>'
+			    	    +  '<td>' + i                   + '</td>'
+			    	    +  '<td>' + resultList[i].usrid + '</td>';			    	    
+			    	str += '</tr>';			    	
+			    	$("#frm_table").append(str);
+			    });	
+			    
+			}			    
+		});	
+	}
 	
+	
+	function createGrid(frmStr){
+		
+		var gridIds = $("#" + frmStr + " tbody tr");
+		var gridKeys = $("#" + frmStr + " thead tr th");
+				
+		var testList = new Array();		
+		
+		var data = new Object();
+		
+		var id = "";
+		
+		for(var i=0; i<gridIds.length; i++){
+					
+			id = $(gridIds[i]).attr('id');
+
+			var inData = new Object();
+			
+			for(var j=0; j<gridKeys.length; j++){
+							
+				inData[gridKeys[j].innerHTML] = $(gridIds[i]).find('td').eq(j).text();
+				
+			}
+			
+			data[id] = inData;
+		}
+				
+		testList.push(data);
+		
+        var data2 = new Object();
+        data2.nAme = testList;
+		
+		console.log( JSON.stringify(testList));
+		
+        // String 형태로 변환
+        var jsonData = JSON.stringify(data2);         
+		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+		
+		$.ajax({
+			url:'/getDataMap',
+			type:'POST',
+			dataType:'json',
+			data:{
+				   data : encrypt.toString()
+			},
+			success:function(data) { 	
+								
+				var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+				var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+							    
+			    console.log(plaintext);
+			}
+		});	        
+		
+		
+	}
 
 
 </script>
@@ -130,30 +258,21 @@
 
 
 <form id="frm_gr">
-	<table>
+	<table id="frm_table">
       <thead>
         <tr>
-          <th>컬럼1</th><th>컬럼2</th><th>컬럼3</th>
+          <th>컬럼1</th>
+          <th>컬럼2</th>
+          <th>컬럼3</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Lorem</td><td>Ipsum</td><td>Dolor</td>
-        </tr>
-        <tr>
-          <td>Lorem</td><td>Ipsum</td><td>Dolor</td>
-        </tr>
-        <tr>
-          <td>Lorem</td><td>Ipsum</td><td>Dolor</td>
-        </tr>
-        <tr>
-          <td>Lorem</td><td>Ipsum</td><td>Dolor</td>
-        </tr>
-        <tr>
-          <td>Lorem</td><td>Ipsum</td><td>Dolor</td>
-        </tr>
+        
       </tbody>
     </table>
+    
+    <input type="button" onclick="createGrid('frm_table');" value="그리드데이터생성">
+    
 </form>
 
 

@@ -23,6 +23,8 @@ public class MainServiceImpl implements MainService{
 		
 		list = mainMapper.getUserList();
 		
+		System.out.println(list.toString());
+		
 		return list;
 	}
 

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.auc.common.config.CommonFunc;
 import com.auc.common.config.ConvertConfig;
 import com.auc.common.config.CriptoConfig;
 import com.auc.common.vo.LoginUser;
@@ -36,6 +40,9 @@ public class MainController {
 	
 	@Autowired
 	CriptoConfig criptoConfig;
+	
+	@Autowired
+	CommonFunc commonFunc;
 	
 	@Resource
 	LoginUser loginUser;
@@ -66,11 +73,15 @@ public class MainController {
 		//로그인 세션 값 넣기
 		loginUser.setEno("123456");
 		
+		//xml 조회
 		List<Map<String, Object>> reList = mainService.getUserList();
 		
 		log.info(reList.toString());
 		
-		String encript = criptoConfig.encript(reList.toString());
+		//JSON으로 변경
+		JSONArray jsonArray = commonFunc.convertListMapToJson(reList);
+		
+		String encript = criptoConfig.encript(jsonArray.toString());
 		
 		log.info("encript : " + encript);
 		
@@ -90,8 +101,6 @@ public class MainController {
 		log.info(map.toString());		
 				
 		//처리 로직
-		
-		
 		
   	    List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
 		

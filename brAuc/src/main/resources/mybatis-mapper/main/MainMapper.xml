@@ -5,7 +5,7 @@
 
 <mapper namespace="com.auc.main.service.Impl.MainMapper">
 
-<select id="getUserList" resultType="hashMap">
+<select id="getUserList" resultType="Map">
         SELECT usrid, usrnm
           FROM TB_LA_IS_MM_USR
     </select>
