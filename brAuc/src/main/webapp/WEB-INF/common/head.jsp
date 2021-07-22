@@ -27,6 +27,68 @@
 var keyutf = CryptoJS.enc.Utf8.parse("<%=key%>");
 var ivutf = CryptoJS.enc.Utf8.parse("<%=iv%>");
 
+
+function createFrm(frmStr){
+	
+	var frmIds = $("#" + frmStr).children('input[type=text], textarea, select, input[type=checkbox]');		
+	
+	var data = new Object();
+	
+	var id = "";		
+	var tagName = "";
+	var tagType = "";
+			
+	for(var i=0; i<frmIds.length; i++){			
+		
+		tagName = $(frmIds[i]).prop('tagName');			
+		id = $(frmIds[i]).attr('id');
+		
+		if(tagName == 'INPUT'){				
+			tagType = $(frmIds[i]).attr('type');
+			
+			//인풋텍스트 일때
+			if(tagType == 'text'){									
+				data[id] = $(frmIds[i]).val();			
+			
+			//인풋체크박스 일때
+			}else if(tagType == 'checkbox'){							
+				data[id] =  $(frmIds[i]).is(":checked") ? '1' : '0';					
+			}
+			
+		}else if(tagName == 'TEXTAREA'){
+			data[id] = $(frmIds[i]).val();
+			
+		}else if(tagName == 'SELECT'){
+			data[id] = $(frmIds[i]).val();				
+		}				
+	}
+	
+	console.log(data);
+	
+	// String 형태로 변환
+    var jsonData = JSON.stringify(data);      
+            
+	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+					
+	$.ajax({
+		url:'/getDataMap',
+		type:'POST',
+		dataType:'json',
+		data:{
+			   data : encrypt.toString()
+		},
+		success:function(data) { 	
+							
+			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+			var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+						    
+		    console.log(plaintext);
+		}
+	});	
+	
+	
+}
+
 </script>
 
 
