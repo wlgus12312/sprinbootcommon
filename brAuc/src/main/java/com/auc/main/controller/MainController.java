@@ -46,6 +46,23 @@ public class MainController {
 	
 	@Resource
 	LoginUser loginUser;
+	
+	@RequestMapping(value="/err", method=RequestMethod.GET)
+	public ModelAndView err() throws Exception{	
+		
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("hello");
+		
+		int i = 1;
+		
+		if(i == 1) {
+			throw new RuntimeException();
+		}		
+		
+		return mv;
+	}
+	
+	
 		
 	@RequestMapping(value="/hello", method=RequestMethod.GET)
 	public ModelAndView hello() throws Exception{				
