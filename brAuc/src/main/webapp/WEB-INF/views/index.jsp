@@ -10,6 +10,9 @@
 <title>main</title>
 </head>
 <script type="text/javascript">
+    
+
+	
     $(document).ready(function() {
         
         // 탭 li 선언
@@ -108,29 +111,32 @@
 
 
 <body>
-
-<h1>main메뉴</h1>
-
-
-<div id="doclist" class="left-menu" style="width:120px;float:left">
-    <h2>트리메뉴</h2>
-    <ul id="documents">
-        <li><a href="#" id = "1" rel="hello" title="This is the content of Document1">hello</a></li>
-        <li><a href="#" id = "2" rel="readPage2" title="This is the content of Document2">탭2</a></li>
-        <li><a href="#" id = "3" rel="readPage3" title="This is the content of Document3">탭3</a></li>
-        <li><a href="#" id = "4" rel="readPage4" title="This is the content of Document4">탭4</a></li>
-        <li><a href="#" id = "5" rel="readPage5" title="This is the content of Document5">탭5</a></li>
-    </ul>
-</div>
-<div id="tabs" class="tab-document" style="width:1000px;float:left">
-  <div class="tabs-list" style="height:700px">
-	  <div id="tabs-0">
-	    <p>탭 구현</p>
-	  </div>
-  </div>
-  <ul>
-    <li><a href="#tabs-0">main</a> </li>
-  </ul>
+<div id="root" class="root">
+	<div id="main-menu" class="mainMenu">
+		<span class="mainmenu h1">main메뉴</span>
+	</div>
+	<div id=left-menu class="left-menu" style="width:120px;float:left">
+	    <h2>트리메뉴</h2>
+	    <ul id="documents">
+	        <li><a href="#" id = "1" rel="hello" title="This is the content of Document1">hello</a></li>
+	        <li><a href="#" id = "2" rel="readPage2" title="This is the content of Document2">탭2</a></li>
+	        <li><a href="#" id = "3" rel="readPage3" title="This is the content of Document3">탭3</a></li>
+	        <li><a href="#" id = "4" rel="readPage4" title="This is the content of Document4">탭4</a></li>
+	        <li><a href="#" id = "5" rel="readPage5" title="This is the content of Document5">탭5</a></li>
+	    </ul>
+	</div>
+	<div id="main-contents">
+		<div id="tabs" class="tab-document" style="width:1000px;float:left">
+		  <div class="tabs-list" style="height:700px">
+			  <div id="tabs-0">
+			    <p>탭 구현</p>
+			  </div>
+		  </div>
+		  <ul>
+		    <li><a href="#tabs-0">main</a> </li>
+		  </ul>
+		</div>
+	</div>
 </div>
 
 
