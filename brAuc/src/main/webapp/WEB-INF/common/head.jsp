@@ -80,7 +80,12 @@ function snedAjaxFrm(frmStr, sendUrl, methodType){
 			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
 			var plaintext = bytes.toString(CryptoJS.enc.Utf8);				
 			result = JSON.parse(plaintext);				    
-		}		
+		},
+		error:function(request){			
+			var errMsg = JSON.parse(request.responseText);			
+			console.log(errMsg);
+			alert(errMsg.message);
+		}
 	});	
 	
 	return result;
@@ -139,6 +144,11 @@ function sendAjaxGrid(grid, sendUrl, methodType){
 			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
 			var plaintext = bytes.toString(CryptoJS.enc.Utf8);				
 			result = JSON.parse(plaintext);					
+		},
+		error:function(request){			
+			var errMsg = JSON.parse(request.responseText);			
+			console.log(errMsg);
+			alert(errMsg.message);
 		}
 	});	        
 	

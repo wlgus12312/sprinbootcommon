@@ -11,8 +11,7 @@
 </head>
 <script>
 	
-	function sendFrm(sendFrm){
-		
+	function sendFrm(sendFrm){		
 		//서버에 호출할 URL
 		var sendUrl = "/getDataMap";		
 		//form data 서버에 전송
@@ -30,10 +29,7 @@
 	    });			
 	}
 	
-	
-	
-	function sendGrid(grid){
-		
+	function sendGrid(grid){		
 		//서버에 호출할 URL
 		var sendUrl = "/getDataMap";		
 		//grid data 서버에 전송
