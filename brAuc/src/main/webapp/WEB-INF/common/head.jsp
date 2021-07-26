@@ -152,8 +152,8 @@ function snedAjaxFrm(frmStr, sendUrl, methodType){
 	var result;
 	
 	$.ajax({
-		//url: sendUrl,
-		url: '/err',
+		url: sendUrl,
+		//url: '/err',
 		type: methodType,
 		dataType:'json',
 		async: false,
