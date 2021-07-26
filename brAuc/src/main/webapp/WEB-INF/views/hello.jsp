@@ -14,12 +14,9 @@
 	function sendFrm(sendFrm){
 		
 		//서버에 호출할 URL
-		var sendUrl = "/getDataMap";
-		
+		var sendUrl = "/getDataMap";		
 		//form data 서버에 전송
 		var results = snedAjaxFrm(sendFrm, sendUrl, "POST");
-					
-		console.log(results);
 		
 		//리턴데이터 처리	
 		//tbody 추가
@@ -37,12 +34,9 @@
 	function sendGrid(grid){
 		
 		//서버에 호출할 URL
-		var sendUrl = "/getDataMap";
-		
+		var sendUrl = "/getDataMap";		
 		//grid data 서버에 전송
 		var results = sendAjaxGrid(grid, sendUrl, "POST");
-		
-		console.log(results);
 		
 		//리턴데이터 처리
 		
@@ -63,7 +57,6 @@
 	<input name="list" type="text" id="data3"/>
 	<input name="list" type="text" id="data4"/>
 	<input type="button" onclick="sendFrm('dataFrm');" value="맵전송">
-	<input type="button" onclick="sendDataListMap();" value="리스트전송">
 </form>
 
 
