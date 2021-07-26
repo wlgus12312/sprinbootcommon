@@ -11,208 +11,40 @@
 </head>
 <script>
 	
-	function sendDataMap(){						
-		//맵        
-        var data = new Object();
-        
-        data.name = $("#data").val();
-        data.id   = $("#data1").val();
-        data.id2  = $("#data2").val();
-        data.id3  = $("#data3").val();
-        data.id4  = $("#data4").val();
-        
-        // String 형태로 변환
-        var jsonData = JSON.stringify(data);      
-                
-		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
-						
-		$.ajax({
-			url:'/getDataMap',
-			type:'POST',
-			dataType:'json',
-			data:{
-				   data : encrypt.toString()
-			},
-			success:function(data) { 	
-								
-				var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
-				var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-							    
-			    console.log(plaintext);
-			}
-		});	
-	}
-	
-	
-	function sendDataListMap(){		
-        
-      	//리스트<맵>
-        var sendData   = $("#data").val();
-        var sendData1  = $("#data1").val();
-        var sendData2  = $("#data2").val();	
-        var sendData3  = $("#data3").val();	
-        var sendData4  = $("#data4").val();	
-        
-        var testList = new Array();     
-                
-        var data = new Object();        
-        data.name = $("#data").val();
-        data.id   = $("#data1").val();
-        data.id2  = $("#data2").val();
-        data.id3  = $("#data3").val();
-        data.id4  = $("#data4").val();
-                
-        testList.push(data);
-        testList.push(data);
-        
-        var data2 = new Object();
-        data2.nAme = testList;
-                      
-        // String 형태로 변환
-        var jsonData = JSON.stringify(data2);         
-		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
-						
-		$.ajax({
-			url:'/getDataListMap',
-			type:'POST',
-			dataType:'json',
-			data:{
-				   data : encrypt.toString()
-			},
-			success:function(data) { 	
-				
-				console.log(data);
-			}
-		});	
-	}
-	
-	
-
-	function createFrm(frmStr){
+	function sendFrm(sendFrm){
 		
-		var frmIds = $("#" + frmStr).children('input[type=text], textarea, select, input[type=checkbox]');		
+		//서버에 호출할 URL
+		var sendUrl = "/getDataMap";
 		
-		var data = new Object();
-		
-		var id = "";		
-		var tagName = "";
-		var tagType = "";
-				
-		for(var i=0; i<frmIds.length; i++){			
-			
-			tagName = $(frmIds[i]).prop('tagName');			
-			id = $(frmIds[i]).attr('id');
-			
-			if(tagName == 'INPUT'){				
-				tagType = $(frmIds[i]).attr('type');
-				
-				//인풋텍스트 일때
-				if(tagType == 'text'){									
-					data[id] = $(frmIds[i]).val();			
-				
-				//인풋체크박스 일때
-				}else if(tagType == 'checkbox'){							
-					data[id] =  $(frmIds[i]).is(":checked") ? '1' : '0';					
-				}
-				
-			}else if(tagName == 'TEXTAREA'){
-				data[id] = $(frmIds[i]).val();
-				
-			}else if(tagName == 'SELECT'){
-				data[id] = $(frmIds[i]).val();				
-			}				
-		}
-		
-		console.log(data);
-		
-		// String 형태로 변환
-	    var jsonData = JSON.stringify(data);      
-	            
-		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
-						
-		$.ajax({
-			url:'/getDataMap',
-			type:'POST',
-			dataType:'json',
-			data:{
-				   data : encrypt.toString()
-			},
-			success:function(data) { 	
-								
-				var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
-				var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-				
-			    var resultList = JSON.parse(plaintext);
-			    
-			    console.log(resultList);
-			    			    			    
-			    //tbody 추가
-			    $.each(resultList, function(i){		
-				    var str = '<tr id=row' + i + '>';				    
-			    	str += '<td>' + resultList[i].usrnm + '</td>'
-			    	    +  '<td>' + i                   + '</td>'
-			    	    +  '<td>' + resultList[i].usrid + '</td>';			    	    
-			    	str += '</tr>';			    	
-			    	$("#frm_table").append(str);
-			    });	
-			    
-			}			    
-		});	
-	}
-	
-	
-	function createGrid(frmStr){
-		
-		var gridIds = $("#" + frmStr + " tbody tr");
-		var gridKeys = $("#" + frmStr + " thead tr th");
-				
-		var testList = new Array();		
-		
-		var data = new Object();
-		
-		var id = "";
-		
-		for(var i=0; i<gridIds.length; i++){
+		//form data 서버에 전송
+		var results = snedAjaxFrm(sendFrm, sendUrl, "POST");
 					
-			id = $(gridIds[i]).attr('id');
-
-			var inData = new Object();
-			
-			for(var j=0; j<gridKeys.length; j++){
-							
-				inData[gridKeys[j].innerHTML] = $(gridIds[i]).find('td').eq(j).text();
-				
-			}
-			
-			data[id] = inData;
-		}
-				
-		testList.push(data);
+		console.log(results);
 		
-        var data2 = new Object();
-        data2.nAme = testList;
+		//리턴데이터 처리	
+		//tbody 추가
+	    $.each(results, function(i){		
+		    var str = '<tr id=row' + i + '>';				    
+	    	str += '<td>' + results[i].usrnm + '</td>'
+	    	    +  '<td>' + i                + '</td>'
+	    	    +  '<td>' + results[i].usrid + '</td>';			    	    
+	    	str += '</tr>';			    	
+	    	$("#frm_table").append(str);
+	    });			
+	}
+	
+	
+	function sendGrid(grid){
 		
-		console.log( JSON.stringify(testList));
+		//서버에 호출할 URL
+		var sendUrl = "/getDataMap";
 		
-        // String 형태로 변환
-        var jsonData = JSON.stringify(data2);         
-		var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+		//grid data 서버에 전송
+		var results = sendAjaxGrid(grid, sendUrl, "POST");
 		
-		$.ajax({
-			url:'/getDataMap',
-			type:'POST',
-			dataType:'json',
-			data:{
-				   data : encrypt.toString()
-			},
-			success:function(data) { 	
-								
-				var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
-				var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-							    
-			    console.log(plaintext);
-			}
-		});	        
+		console.log(results);
+		
+		//리턴데이터 처리
 		
 		
 	}
@@ -230,7 +62,7 @@
 	<input name="list" type="text" id="data2"/>
 	<input name="list" type="text" id="data3"/>
 	<input name="list" type="text" id="data4"/>
-	<input type="button" onclick="sendDataMap();" value="맵전송">
+	<input type="button" onclick="sendFrm('dataFrm');" value="맵전송">
 	<input type="button" onclick="sendDataListMap();" value="리스트전송">
 </form>
 
@@ -253,7 +85,7 @@
 	
 	<input type="checkbox" id="data7" name="xxx" value="yyy" checked>
 	
-	<input type="button" onclick="createFrm('hello_frm');" value="폼데이터생성">
+	<input type="button" onclick="sendFrm('hello_frm');" value="폼데이터생성">
 </form>
 
 
@@ -271,7 +103,7 @@
       </tbody>
     </table>
     
-    <input type="button" onclick="createGrid('frm_table');" value="그리드데이터생성">
+    <input type="button" onclick="sendGrid('frm_table');" value="그리드데이터생성">
     
 </form>
 

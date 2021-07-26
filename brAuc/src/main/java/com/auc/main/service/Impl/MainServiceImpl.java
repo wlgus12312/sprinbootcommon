@@ -17,15 +17,16 @@ public class MainServiceImpl implements MainService{
 	
 
 	@Override
-	public List<Map<String, Object>> getUserList() throws Exception {
+	public List<Map<String, Object>> getUserList(Map<String, Object> map) throws Exception {
 
 		List<Map<String, Object>> list = null;
 		
-		list = mainMapper.getUserList();
+		list = mainMapper.getUserList(map);
 		
 		System.out.println(list.toString());
 		
 		return list;
 	}
+
 
 }

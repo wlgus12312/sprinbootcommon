@@ -29,6 +29,201 @@ var keyutf = CryptoJS.enc.Utf8.parse("<%=key%>");
 var ivutf = CryptoJS.enc.Utf8.parse("<%=iv%>");
 
 
+function snedAjaxFrm(frmStr, sendUrl, methodType){
+	
+	var frmIds = $("#" + frmStr).children('input[type=text], textarea, select, input[type=checkbox]');	
+	var data = new Object();
+	
+	var id = "";		
+	var tagName = "";
+	var tagType = "";
+			
+	for(var i=0; i<frmIds.length; i++){			
+		
+		tagName = $(frmIds[i]).prop('tagName');		    	
+		id = $(frmIds[i]).attr('id');
+		
+		if(tagName == 'INPUT'){				
+			tagType = $(frmIds[i]).attr('type');
+			
+			if(tagType == 'text'){									
+				data[id] = $(frmIds[i]).val();			
+			
+			}else if(tagType == 'checkbox'){							
+				data[id] =  $(frmIds[i]).is(":checked") ? '1' : '0';					
+			}
+			
+		}else if(tagName == 'TEXTAREA'){
+			data[id] = $(frmIds[i]).val();
+			
+		}else if(tagName == 'SELECT'){
+			data[id] = $(frmIds[i]).val();				
+		}				
+	}
+	
+	// String 형태로 변환
+    var jsonData = JSON.stringify(data);                  
+	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});	
+		
+	var result;
+	
+	$.ajax({
+		url: sendUrl,
+		type: methodType,
+		dataType:'json',
+		async: false,
+		data:{
+			   data : encrypt.toString()
+		},
+		success:function(data) { 	
+							
+			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+			var plaintext = bytes.toString(CryptoJS.enc.Utf8);				
+			result = JSON.parse(plaintext);				    
+		}		
+	});	
+	
+	return result;
+	
+	
+}
+
+
+function sendAjaxGrid(grid, sendUrl, methodType){
+		
+	var gridIds = $("#" + grid + " tbody tr");
+	var gridKeys = $("#" + grid + " thead tr th");
+			
+	var testList = new Array();		
+	
+	var data = new Object();
+	
+	var id = "";
+	
+	for(var i=0; i<gridIds.length; i++){
+				
+		id = $(gridIds[i]).attr('id');
+
+		var inData = new Object();
+		
+		for(var j=0; j<gridKeys.length; j++){
+						
+			inData[gridKeys[j].innerHTML] = $(gridIds[i]).find('td').eq(j).text();
+			
+		}
+		
+		data[id] = inData;
+	}
+			
+	testList.push(data);
+	
+    var data2 = new Object();
+    data2.nAme = testList;
+	
+    // String 형태로 변환
+    var jsonData = JSON.stringify(data2);         
+	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+	
+	var result;
+	
+	$.ajax({
+		url: sendUrl,
+		type: methodType,
+		dataType:'json',
+		async: false,
+		data:{
+			   data : encrypt.toString()
+		},
+		success:function(data) { 	
+							
+			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+			var plaintext = bytes.toString(CryptoJS.enc.Utf8);				
+			result = JSON.parse(plaintext);					
+		}
+	});	        
+	
+	return result;
+}
+
+
+
+/*
+function sendDataMap(){						
+	//맵        
+    var data = new Object();
+    
+    data.name = $("#data").val();
+    data.id   = $("#data1").val();
+    data.id2  = $("#data2").val();
+    data.id3  = $("#data3").val();
+    data.id4  = $("#data4").val();
+    
+    // String 형태로 변환
+    var jsonData = JSON.stringify(data);      
+            
+	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+					
+	$.ajax({
+		url:'/getDataMap',
+		type:'POST',
+		dataType:'json',
+		data:{
+			   data : encrypt.toString()
+		},
+		success:function(data) { 	
+							
+			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
+			var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+						    
+		    console.log(plaintext);
+		}
+	});	
+}
+*/
+
+/*
+function sendDataListMap(){		
+    
+  	//리스트<맵>
+    var sendData   = $("#data").val();
+    var sendData1  = $("#data1").val();
+    var sendData2  = $("#data2").val();	
+    var sendData3  = $("#data3").val();	
+    var sendData4  = $("#data4").val();	
+    
+    var testList = new Array();     
+            
+    var data = new Object();        
+    data.name = $("#data").val();
+    data.id   = $("#data1").val();
+    data.id2  = $("#data2").val();
+    data.id3  = $("#data3").val();
+    data.id4  = $("#data4").val();
+            
+    testList.push(data);
+    testList.push(data);
+    
+    var data2 = new Object();
+    data2.nAme = testList;
+                  
+    // String 형태로 변환
+    var jsonData = JSON.stringify(data2);         
+	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
+					
+	$.ajax({
+		url:'/getDataListMap',
+		type:'POST',
+		dataType:'json',
+		data:{
+			   data : encrypt.toString()
+		},
+		success:function(data) { 	
+			
+			console.log(data);
+		}
+	});	
+}
+*/
 
 </script>
 

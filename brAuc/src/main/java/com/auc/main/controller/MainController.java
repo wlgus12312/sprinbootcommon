@@ -1,15 +1,12 @@
 package com.auc.main.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,6 @@ import com.auc.common.config.CriptoConfig;
 import com.auc.common.vo.LoginUser;
 import com.auc.common.vo.ResolverMap;
 import com.auc.main.service.MainService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class MainController {
@@ -51,14 +47,11 @@ public class MainController {
 	public ModelAndView err() throws Exception{	
 		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("hello");
-		
-		int i = 1;
-		
+		mv.setViewName("hello");		
+		int i = 1;		
 		if(i == 1) {
 			throw new RuntimeException();
-		}		
-		
+		}				
 		return mv;
 	}
 	
@@ -85,23 +78,17 @@ public class MainController {
 	public Map<String, Object> getDataMap(ResolverMap rMap) throws Exception{				
 		
 		Map<String, Object> map = convertConfig.conMap(rMap);
+		
 		log.info(map.toString());
 		
-		//로그인 세션 값 넣기
-		loginUser.setEno("123456");
-		
 		//xml 조회
-		List<Map<String, Object>> reList = mainService.getUserList();
-		
-		log.info(reList.toString());
-		
+		List<Map<String, Object>> reList = mainService.getUserList(map);
+				
 		//JSON으로 변경
 		JSONArray jsonArray = commonFunc.convertListMapToJson(reList);
 		
 		String encript = criptoConfig.encript(jsonArray.toString());
-		
-		log.info("encript : " + encript);
-		
+				
 		Map<String, Object> reMap = new HashMap<String, Object>();
 		
 		reMap.put("data", encript);
@@ -111,23 +98,33 @@ public class MainController {
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/getDataListMap", method=RequestMethod.POST)
-	public List<Map<String, Object>> getDataListMap(ResolverMap rMap) throws Exception{				
-								
-		Map<String, Object> map = convertConfig.conMap(rMap); 		
-		log.info(map.toString());		
-				
-		//처리 로직
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(ResolverMap rMap) throws Exception{				
 		
-  	    List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+		//로그인 세션 값 넣기
+		loginUser.setEno("123456");
 		
-		Map<String, Object> reMap = new HashMap<String, Object>();
-		
-		reMap.put("result", 1);
-		reList.add(reMap);
-		
-		return reList;
+		return "SUCCESS";
 	}
+	
+	
+//	@ResponseBody
+//	@RequestMapping(value="/getDataListMap", method=RequestMethod.POST)
+//	public List<Map<String, Object>> getDataListMap(ResolverMap rMap) throws Exception{				
+//								
+//		Map<String, Object> map = convertConfig.conMap(rMap); 		
+//		log.info(map.toString());		
+//				
+//		//처리 로직		
+//  	    List<Map<String, Object>> reList = new ArrayList<Map<String, Object>>();
+//		
+//		Map<String, Object> reMap = new HashMap<String, Object>();
+//		
+//		reMap.put("result", 1);
+//		reList.add(reMap);
+//		
+//		return reList;
+//	}
 	
 	
 	

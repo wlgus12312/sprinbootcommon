@@ -8,6 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MainMapper {
 
-	List<Map<String, Object>> getUserList() throws Exception;
+	List<Map<String, Object>> getUserList(Map<String, Object> map) throws Exception;
 
 }
