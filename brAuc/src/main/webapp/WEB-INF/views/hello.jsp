@@ -31,6 +31,7 @@
 	}
 	
 	
+	
 	function sendGrid(grid){
 		
 		//서버에 호출할 URL

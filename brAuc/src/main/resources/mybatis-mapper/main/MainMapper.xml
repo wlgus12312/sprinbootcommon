@@ -10,6 +10,7 @@
           FROM TB_LA_IS_MM_USR          
           <if test="data1 != null">
          	WHERE usrnm LIKE '%'+#{data1}+'%' 
+         	
           </if>
          
 

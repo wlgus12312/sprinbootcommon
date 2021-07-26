@@ -37,7 +37,7 @@ function snedAjaxFrm(frmStr, sendUrl, methodType){
 	var id = "";		
 	var tagName = "";
 	var tagType = "";
-			
+				
 	for(var i=0; i<frmIds.length; i++){			
 		
 		tagName = $(frmIds[i]).prop('tagName');		    	

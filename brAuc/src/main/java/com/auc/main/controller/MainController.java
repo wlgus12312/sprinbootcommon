@@ -54,8 +54,7 @@ public class MainController {
 		}				
 		return mv;
 	}
-	
-	
+		
 		
 	@RequestMapping(value="/hello", method=RequestMethod.GET)
 	public ModelAndView hello() throws Exception{				

@@ -12,8 +12,7 @@ import com.auc.main.service.MainService;
 public class MainServiceImpl implements MainService{
 	
 	@Autowired
-	MainMapper mainMapper;
-	
+	MainMapper mainMapper;	
 	
 
 	@Override
