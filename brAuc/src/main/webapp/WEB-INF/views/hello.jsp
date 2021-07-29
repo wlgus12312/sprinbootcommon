@@ -14,19 +14,14 @@
 	function sendFrm(sendFrm){		
 		//서버에 호출할 URL
 		var sendUrl = "/getDataMap";		
-		//form data 서버에 전송
-		var results = snedAjaxFrm(sendFrm, sendUrl, "POST");
 		
-		//리턴데이터 처리	
-		//tbody 추가
-	    $.each(results, function(i){		
-		    var str = '<tr id=row' + i + '>';				    
-	    	str += '<td>' + results[i].usrnm + '</td>'
-	    	    +  '<td>' + i                + '</td>'
-	    	    +  '<td>' + results[i].usrid + '</td>';			    	    
-	    	str += '</tr>';			    	
-	    	$("#frm_table").append(str);
-	    });			
+		//form data 서버에 전송
+		var results = snedAjaxFrm(sendFrm, sendUrl, "POST");				
+		
+		//그리드 그리기
+		//테이블 id 전달, 그릴 데이터 
+		setGrid('frm_table', results);		
+		
 	}
 	
 	function sendGrid(grid){		
@@ -36,7 +31,6 @@
 		var results = sendAjaxGrid(grid, sendUrl, "POST");
 		
 		//리턴데이터 처리
-		
 		
 	}
 
@@ -83,9 +77,8 @@
 	<table id="frm_table">
       <thead>
         <tr>
-          <th>컬럼1</th>
-          <th>컬럼2</th>
-          <th>컬럼3</th>
+          <th name="list" value="usrnm">컬럼1</th>
+          <th name="list" value="usrid">컬럼2</th>
         </tr>
       </thead>
       <tbody>

@@ -242,6 +242,45 @@ function sendAjaxGrid(grid, sendUrl, methodType){
 
 
 
+function setGrid(grid, results){
+	
+	console.log(results);
+	
+	var gridTh = $("#"+ grid + " thead tr").children();	
+	
+	var thValue = new Array();
+	
+	//thead value값 받아오기
+	for(var i=0; i<gridTh.length; i++){			
+		thValue[i] = $(gridTh[i]).attr('value');
+	}
+	
+	//리턴데이터 처리	
+	//tbody 추가
+    $.each(results, function(i){		
+    	
+    	var str = '<tr id=row' + i + '>';
+    		    	
+    	var resultsKeys   = Object.keys(results[i]);
+    	var resultsValues = Object.values(results[i]);	    	
+    	
+    	for(var j = 0; j < resultsKeys.length; j++){
+    			    		
+    		for(var k = 0; k < thValue.length; k++){   
+    			if(resultsKeys[j].includes(thValue[k])){
+    				str += '<td>' + resultsValues[j] + '</td>';
+    			}else{
+    				str += '<td style="display:none;">' + resultsValues[j] + '</td>';
+    			}	    				
+    		}	    		
+    	}
+    	str += '</tr>';
+    	$("#" + grid).append(str);
+    });	
+	
+}
+
+
 /*
 function sendDataMap(){						
 	//맵        
