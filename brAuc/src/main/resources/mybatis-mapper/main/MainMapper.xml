@@ -5,7 +5,7 @@
 
 <mapper namespace="com.auc.main.service.Impl.MainMapper">
 
-<select id="getUserList" resultType="Map" parameterType="Map">
+<select id="getUserList" resultType="java.util.LinkedHashMap" parameterType="Map">
         SELECT usrid, usrnm, mpno
           FROM TB_LA_IS_MM_USR          
           <if test="data1 != null">

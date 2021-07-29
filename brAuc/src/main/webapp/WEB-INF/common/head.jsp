@@ -244,10 +244,7 @@ function sendAjaxGrid(grid, sendUrl, methodType){
 
 function setGrid(grid, results){
 	
-	console.log(results);
-	
-	var gridTh = $("#"+ grid + " thead tr").children();	
-	
+	var gridTh = $("#"+ grid + " thead tr").children();		
 	var thValue = new Array();
 	
 	//thead value값 받아오기
@@ -265,9 +262,13 @@ function setGrid(grid, results){
     	var resultsValues = Object.values(results[i]);	    	
     	
     	for(var j = 0; j < resultsKeys.length; j++){
-    			    		
+    		    			    		
     		for(var k = 0; k < thValue.length; k++){   
-    			if(resultsKeys[j].includes(thValue[k])){
+    			
+    			console.log(resultsKeys[j] + " : "+ thValue[k]);
+    			console.log(resultsKeys[j] == thValue[k]);
+    			
+    			if(resultsKeys[j] == thValue[k]){
     				str += '<td>' + resultsValues[j] + '</td>';
     			}else{
     				str += '<td style="display:none;">' + resultsValues[j] + '</td>';

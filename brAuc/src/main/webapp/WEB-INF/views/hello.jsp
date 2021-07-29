@@ -11,18 +11,22 @@
 </head>
 <script>
 	
-	function sendFrm(sendFrm){		
+	function sendFrm(sendFrm, grid){		
 		//서버에 호출할 URL
 		var sendUrl = "/getDataMap";		
 		
 		//form data 서버에 전송
 		var results = snedAjaxFrm(sendFrm, sendUrl, "POST");				
 		
-		//그리드 그리기
 		//테이블 id 전달, 그릴 데이터 
-		setGrid('frm_table', results);		
+		setGrid(grid, results);								
 		
 	}
+	
+	
+	
+	
+	
 	
 	function sendGrid(grid){		
 		//서버에 호출할 URL
@@ -69,7 +73,7 @@
 	
 	<input type="checkbox" id="data7" name="xxx" value="yyy" checked>
 	
-	<input type="button" onclick="sendFrm('hello_frm');" value="폼데이터생성">
+	<input type="button" onclick="sendFrm('hello_frm', 'frm_table');" value="폼데이터생성">
 </form>
 
 
@@ -77,8 +81,8 @@
 	<table id="frm_table">
       <thead>
         <tr>
-          <th name="list" value="usrnm">컬럼1</th>
-          <th name="list" value="usrid">컬럼2</th>
+          <th name="list" value="usrid">컬럼1</th>
+          <th name="list" value="usrnm">컬럼2</th>
         </tr>
       </thead>
       <tbody>
