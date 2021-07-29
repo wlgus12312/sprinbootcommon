@@ -252,31 +252,32 @@ function setGrid(grid, results){
 		thValue[i] = $(gridTh[i]).attr('value');
 	}
 	
-	//리턴데이터 처리	
 	//tbody 추가
     $.each(results, function(i){		
     	
     	var str = '<tr id=row' + i + '>';
     		    	
     	var resultsKeys   = Object.keys(results[i]);
-    	var resultsValues = Object.values(results[i]);	    	
+    	var resultsValues = Object.values(results[i]);
     	
-    	for(var j = 0; j < resultsKeys.length; j++){
-    		    			    		
-    		for(var k = 0; k < thValue.length; k++){   
-    			
-    			console.log(resultsKeys[j] + " : "+ thValue[k]);
-    			console.log(resultsKeys[j] == thValue[k]);
-    			
-    			if(resultsKeys[j] == thValue[k]){
+    	// thValue 중에  resultsKeys에 없는것은 히든
+    	for(var j=0; j<resultsKeys.length; j++){
+    		for(var k=0; k<thValue.length; k++){    			
+    			if(resultsKeys[j].includes(thValue[k])){    				
     				str += '<td>' + resultsValues[j] + '</td>';
-    			}else{
-    				str += '<td style="display:none;">' + resultsValues[j] + '</td>';
-    			}	    				
-    		}	    		
+    				break;
+    			}    			
+    		}
+    	}    	
+    	
+    	//히든데이터 추가
+    	for(var n=0; n<resultsKeys.length; n++){
+    		str += '<td style="display:none;"><input tpye="hidden" value="'+ resultsValues[n] + '"/></td>';
     	}
-    	str += '</tr>';
+ 
+		str += '</tr>';
     	$("#" + grid).append(str);
+    	
     });	
 	
 }

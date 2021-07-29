@@ -6,7 +6,7 @@
 <mapper namespace="com.auc.main.service.Impl.MainMapper">
 
 <select id="getUserList" resultType="java.util.LinkedHashMap" parameterType="Map">
-        SELECT usrid, usrnm, mpno
+        SELECT usrid, usrnm, mpno, na_bzplc
           FROM TB_LA_IS_MM_USR          
           <if test="data1 != null">
          	WHERE usrnm LIKE '%'+#{data1}+'%' 

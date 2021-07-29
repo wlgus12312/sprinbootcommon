@@ -24,10 +24,6 @@
 	}
 	
 	
-	
-	
-	
-	
 	function sendGrid(grid){		
 		//서버에 호출할 URL
 		var sendUrl = "/getDataMap";		
@@ -83,6 +79,7 @@
         <tr>
           <th name="list" value="usrid">컬럼1</th>
           <th name="list" value="usrnm">컬럼2</th>
+          <th name="list" value="mpno">컬럼3</th>
         </tr>
       </thead>
       <tbody>
