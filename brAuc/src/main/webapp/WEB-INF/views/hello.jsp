@@ -77,9 +77,11 @@
 	<table id="frm_table">
       <thead>
         <tr>
-          <th name="list" value="usrid">컬럼1</th>
-          <th name="list" value="usrnm">컬럼2</th>
-          <th name="list" value="mpno">컬럼3</th>
+          <th name="list" id="usrid" value="usrid">아아디</th>
+          <th name="list" id="usrnm" value="usrnm">이름</th>
+          <th name="list" id="mpno"  value="mpno">휴대폰</th>
+          <th name="list" id="na_bzplc" value="na_bzplc" style="display:none;">사번</th>
+          <th name="list" id="strg_yn" value="strg_yn" style="display:none;">여부</th>
         </tr>
       </thead>
       <tbody>

@@ -22,7 +22,16 @@ public class MainServiceImpl implements MainService{
 		
 		list = mainMapper.getUserList(map);
 		
-		System.out.println(list.toString());
+		return list;
+	}
+
+
+	@Override
+	public List<Map<String, Object>> selectMenuList(Map<String, Object> map) throws Exception {
+		
+		List<Map<String, Object>> list = null;
+		
+		list = mainMapper.selectMenuList(map);
 		
 		return list;
 	}

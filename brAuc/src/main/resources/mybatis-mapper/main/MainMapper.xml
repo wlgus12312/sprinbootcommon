@@ -5,15 +5,34 @@
 
 <mapper namespace="com.auc.main.service.Impl.MainMapper">
 
-<select id="getUserList" resultType="java.util.LinkedHashMap" parameterType="Map">
-        SELECT usrid, usrnm, mpno, na_bzplc
+	<select id="getUserList" resultType="java.util.LinkedHashMap" parameterType="Map">
+        SELECT usrid, usrnm, mpno, na_bzplc, strg_yn
           FROM TB_LA_IS_MM_USR          
           <if test="data1 != null">
          	WHERE usrnm LIKE '%'+#{data1}+'%' 
-         	
           </if>
-         
-
     </select>
+    
+    <select id="selectMenuList" resultType="hashMap">
+    	SELECT A.menu_id
+			 , A.mnnm_cntn AS menu_nm
+			 , A.menu_lvl_c
+			 , A.sort_sq
+			 , A.pgid
+			 , A.uyn
+			 , CASE WHEN A.menu_lvl_c = '2' THEN A.menu_id
+					WHEN A.menu_lvl_c = '3' THEN SUBSTRING(A.menu_id, 1, 4) + '00'
+				    END AS scd_menu_id
+			 , CASE WHEN A.menu_lvl_c = '2' THEN A.mnnm_cntn
+					WHEN A.menu_lvl_c = '3' THEN  (SELECT mnnm_cntn FROM TB_LA_IS_MM_MENU WHERE menu_id = SUBSTRING(A.menu_id, 1, 4) + '00')
+				    END AS scd_menu_nm
+			 FROM TB_LA_IS_MM_MENU A
+			WHERE A.menu_lvl_c != '1'
+    </select>
+    
+    
+    
+    
+    
 
 </mapper>

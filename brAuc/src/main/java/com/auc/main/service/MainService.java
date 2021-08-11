@@ -6,6 +6,8 @@ import java.util.Map;
 public interface MainService {
 
 	List<Map<String, Object>> getUserList(Map<String, Object> map) throws Exception;
+
+	List<Map<String, Object>> selectMenuList(Map<String, Object> map) throws Exception;
 	
 	
 

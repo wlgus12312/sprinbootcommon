@@ -43,6 +43,31 @@ public class MainController {
 	@Resource
 	LoginUser loginUser;
 	
+	
+	@ResponseBody
+	@RequestMapping(value="/selectMenuList", method=RequestMethod.POST)
+	public Map<String, Object> selectMenuList(ResolverMap rMap) throws Exception{				
+		
+		Map<String, Object> map = convertConfig.conMap(rMap);
+				
+		//xml 조회
+		List<Map<String, Object>> reList = mainService.selectMenuList(map);
+				
+		//JSON으로 변경
+		JSONArray jsonArray = commonFunc.convertListMapToJson(reList);
+		
+		String encript = criptoConfig.encript(jsonArray.toString());
+				
+		Map<String, Object> reMap = new HashMap<String, Object>();
+		
+		reMap.put("data", encript);
+		
+		return reMap;
+	}
+	
+	
+	
+	
 	@RequestMapping(value="/err", method=RequestMethod.GET)
 	public ModelAndView err() throws Exception{	
 		

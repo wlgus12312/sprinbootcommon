@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MainMapper {
 
 	List<Map<String, Object>> getUserList(Map<String, Object> map) throws Exception;
+
+	List<Map<String, Object>> selectMenuList(Map<String, Object> map) throws Exception;
 	
 
 }

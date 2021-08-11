@@ -55,6 +55,15 @@
   margin:2px 0px;
   border-color:#555;
 }
+
+.errPop {	
+  position:fixed;
+  width:50%;
+  height:50%;
+  background-color : skyblue;
+  color : black;  
+}
+
 </style>
 
 
@@ -167,9 +176,18 @@ function snedAjaxFrm(frmStr, sendUrl, methodType){
 			result = JSON.parse(plaintext);				    
 		},
 		error:function(request){			
-			var errMsg = JSON.parse(request.responseText);			
-			console.log(errMsg);
-			alert(errMsg.message);
+			var errMsg = JSON.parse(request.responseText);	
+			
+			//에러
+			$("#errStatus").text(errMsg.status);
+			$("#errMessage").text(errMsg.message);
+			$("#errCode").text(errMsg.code);
+			
+			$("#errDiv").show();
+			$("#errDiv").draggable({
+				handle: "#errDiv_in"
+			});
+						
 		}
 	});	
 	
@@ -181,25 +199,22 @@ function snedAjaxFrm(frmStr, sendUrl, methodType){
 
 function sendAjaxGrid(grid, sendUrl, methodType){
 		
-	var gridIds = $("#" + grid + " tbody tr");
+	var gridIds = $("#" + grid + " tbody tr");		
 	var gridKeys = $("#" + grid + " thead tr th");
-			
-	var testList = new Array();		
-	
+				
+	var testList = new Array();	
 	var data = new Object();
 	
 	var id = "";
 	
 	for(var i=0; i<gridIds.length; i++){
-				
+		
 		id = $(gridIds[i]).attr('id');
 
 		var inData = new Object();
-		
+
 		for(var j=0; j<gridKeys.length; j++){
-						
-			inData[gridKeys[j].innerHTML] = $(gridIds[i]).find('td').eq(j).text();
-			
+			inData[$(gridKeys[j]).attr('id')] = $(gridIds[i]).find('td:hidden').eq(j).text();			
 		}
 		
 		data[id] = inData;
@@ -208,7 +223,7 @@ function sendAjaxGrid(grid, sendUrl, methodType){
 	testList.push(data);
 	
     var data2 = new Object();
-    data2.nAme = testList;
+    data2.data = testList;
 	
     // String 형태로 변환
     var jsonData = JSON.stringify(data2);         
@@ -248,10 +263,12 @@ function setGrid(grid, results){
 	var thValue = new Array();
 	
 	//thead value값 받아오기
-	for(var i=0; i<gridTh.length; i++){			
-		thValue[i] = $(gridTh[i]).attr('value');
+	for(var i=0; i<gridTh.length; i++){
+		if($(gridTh[i]).is(":visible")){
+			thValue[i] = $(gridTh[i]).attr('value');
+		}
 	}
-	
+		
 	//tbody 추가
     $.each(results, function(i){		
     	
@@ -259,8 +276,7 @@ function setGrid(grid, results){
     		    	
     	var resultsKeys   = Object.keys(results[i]);
     	var resultsValues = Object.values(results[i]);
-    	
-    	// thValue 중에  resultsKeys에 없는것은 히든
+    	    	
     	for(var j=0; j<resultsKeys.length; j++){
     		for(var k=0; k<thValue.length; k++){    			
     			if(resultsKeys[j].includes(thValue[k])){    				
@@ -270,9 +286,8 @@ function setGrid(grid, results){
     		}
     	}    	
     	
-    	//히든데이터 추가
     	for(var n=0; n<resultsKeys.length; n++){
-    		str += '<td style="display:none;"><input tpye="hidden" value="'+ resultsValues[n] + '"/></td>';
+    		str += '<td style="display:none;">'+ resultsValues[n] + '</td>';
     	}
  
 		str += '</tr>';
@@ -282,87 +297,7 @@ function setGrid(grid, results){
 	
 }
 
-
-/*
-function sendDataMap(){						
-	//맵        
-    var data = new Object();
-    
-    data.name = $("#data").val();
-    data.id   = $("#data1").val();
-    data.id2  = $("#data2").val();
-    data.id3  = $("#data3").val();
-    data.id4  = $("#data4").val();
-    
-    // String 형태로 변환
-    var jsonData = JSON.stringify(data);      
-            
-	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
-					
-	$.ajax({
-		url:'/getDataMap',
-		type:'POST',
-		dataType:'json',
-		data:{
-			   data : encrypt.toString()
-		},
-		success:function(data) { 	
-							
-			var bytes  = CryptoJS.AES.decrypt(data.data.toString(), keyutf, {iv: ivutf});
-			var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-						    
-		    console.log(plaintext);
-		}
-	});	
-}
-*/
-
-/*
-function sendDataListMap(){		
-    
-  	//리스트<맵>
-    var sendData   = $("#data").val();
-    var sendData1  = $("#data1").val();
-    var sendData2  = $("#data2").val();	
-    var sendData3  = $("#data3").val();	
-    var sendData4  = $("#data4").val();	
-    
-    var testList = new Array();     
-            
-    var data = new Object();        
-    data.name = $("#data").val();
-    data.id   = $("#data1").val();
-    data.id2  = $("#data2").val();
-    data.id3  = $("#data3").val();
-    data.id4  = $("#data4").val();
-            
-    testList.push(data);
-    testList.push(data);
-    
-    var data2 = new Object();
-    data2.nAme = testList;
-                  
-    // String 형태로 변환
-    var jsonData = JSON.stringify(data2);         
-	var encrypt = CryptoJS.AES.encrypt(jsonData.toString(), keyutf, {iv:ivutf});
-					
-	$.ajax({
-		url:'/getDataListMap',
-		type:'POST',
-		dataType:'json',
-		data:{
-			   data : encrypt.toString()
-		},
-		success:function(data) { 	
-			
-			console.log(data);
-		}
-	});	
-}
-*/
-
 </script>
-
 <div id="context-menu">
     <div id="item-cut" class="item">
         <i class="fa fa-cut"></i> Cut

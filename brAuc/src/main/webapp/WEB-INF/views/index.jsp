@@ -14,7 +14,43 @@
 
 	
     $(document).ready(function() {
-        
+    	
+    	//메뉴리스트 가져오기
+		var sendUrl = "/selectMenuList";
+    	
+    	//메뉴 리스트
+		var results = snedAjaxFrm('', sendUrl, "POST");		
+		
+		//상단메뉴
+	    $.each(results, function(i){	    	
+	    	if(results[i].menu_lvl_c == "2"){
+	    		var topMenu = "<span class='mainmenu h1' style='margin:10px;' scd_menu_id='"+ results[i].scd_menu_id +"'>" + results[i].scd_menu_nm + "</span>";
+			    $("#main-menu").append(topMenu);
+	    	}	    	
+	    });
+				
+		//트리메뉴
+	    $("#main-menu span").click(function() {	    	
+	    	
+	    	$("#documents").empty();
+	    	
+	    	var scd_menu_id = $(this).attr('scd_menu_id');
+	    	
+		    $.each(results, function(i){	    	
+		    	if(results[i].menu_lvl_c == "3" && results[i].scd_menu_id == scd_menu_id){
+		    		var treeMenu = '<li><a href="#" id = "' + results[i].pgid + '" rel="' + results[i].menu_id + '">' + results[i].menu_nm + '</a></li>';
+				    $("#documents").append(treeMenu);
+		    	}	    	
+		    });	    	
+	    });
+		
+		
+		
+		
+
+    	//에러
+    	$("#errDiv").hide();
+    			
         // 탭 li 선언
         var tabTemplate = "<li><a href='<%="#"%>{href}'><%="#"%>{label}</a> <span class='ui-icon ui-icon-close' role='presentation'>Remove Tab</span></li>";
         // 탭 선언
@@ -106,6 +142,13 @@
             tabs.tabs( "option", "active", $("#tab_header").index());
         }
     });
+    
+    
+    //에러팝업 닫기
+    function closeErrPop(){    	
+    	$("#errDiv").hide();    	
+    }
+    
         
 </script>
 
@@ -118,17 +161,33 @@
 	<div id=left-menu class="left-menu" style="width:120px;float:left">
 	    <h2>트리메뉴</h2>
 	    <ul id="documents">
+	    	<!-- 
 	        <li><a href="#" id = "1" rel="hello" title="This is the content of Document1">hello</a></li>
 	        <li><a href="#" id = "2" rel="readPage2" title="This is the content of Document2">탭2</a></li>
 	        <li><a href="#" id = "3" rel="readPage3" title="This is the content of Document3">탭3</a></li>
 	        <li><a href="#" id = "4" rel="readPage4" title="This is the content of Document4">탭4</a></li>
 	        <li><a href="#" id = "5" rel="readPage5" title="This is the content of Document5">탭5</a></li>
+	         -->
 	    </ul>
 	</div>
 	<div id="main-contents">
 		<div id="tabs" class="tab-document" style="width:1000px;float:left">
-		  <div class="tabs-list" style="height:700px">
-			  <div id="tabs-0">
+		  
+		  <div class="errPop" id="errDiv">
+		          <div id="errDiv_in" style="background-color:gray;">
+		      	      <p>22222</p>
+		          </div>
+		          <div> 
+		      	      <p id="errStatus"></p>
+			          <p id="errMessage"></p>
+			          <p id="errCode"></p>
+			          <br>
+			          <input type="button" onclick="closeErrPop();" value="닫기"/>
+		          </div>
+		  </div>
+		  
+		  <div class="tabs-list" style="height:700px"> 
+		  	    <div id="tabs-0">
 			    <p>탭 구현</p>
 			  </div>
 		  </div>
